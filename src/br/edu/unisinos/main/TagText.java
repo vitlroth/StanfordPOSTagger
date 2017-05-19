@@ -49,15 +49,15 @@ public class TagText {
 	 * 
 	 * @param regras
 	 */
-	static void exibeBidmenssional(String[][] regras) {
+	static void exibeBidmenssional(String[][] array) {
 		
 		
 		
 		int linha;
-		for (linha = 0; linha < regras.length; linha++) {
-			System.out.printf(" %da. linha : ", (linha + 1));
-			for (int coluna = 0; coluna < regras[linha].length; coluna++) {
-				System.out.print(" " + regras[linha][coluna]);
+		for (linha = 0; linha < array.length; linha++) {
+		//	System.out.printf(" %da. linha : ", (linha + 1));
+			for (int coluna = 0; coluna < array[linha].length; coluna++) {
+				System.out.print(" " + array[linha][coluna]);
 			}
 			System.out.printf("\n");
 
@@ -218,64 +218,69 @@ public class TagText {
 		return newArray;
 	}
 
-	static void parser() {
+	
+	/***
+	 * 
+	 * @param frase
+	 * @return um array bidimenssional com a analise morfologica da frase
+	 */
+	
+	
+	
+	static String [][] parser(String frase) {
 
 		Properties props = new Properties();
 		props.setProperty("annotators", "tokenize, ssplit, pos");
 		StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-		String textPRD = "This is a dog .";
-	String textNN = "Barack Obama is the president of America .";
-		String textPRP = "Carla is a beatifull girl .";
-
-
-		String[][] regras = { { "NNP", "VBZ", "DT", "NN", "#", "Who", "0", "#" },
-				{ "NNP", "VBZ", "DT", "NN", "NN", "#", "Who", "0", "#" },
-				{ "DT", "NNP", "VBZ", "DT", "NN", "NN", "#", "Who", "1", "", "0", "#" } };
-
-		/*
-		 * Elimina os espaços e conta o numero de palavras da frase. Seta o
-		 * tamanho do novoArray conforme o tamanho da frase.
-		 * 
-		 * 
-		 */
-		String[] array = textPRP.split(" ");
-		String[] novoarray = new String[array.length];
-
-		Annotation annotation = new Annotation(textPRP);
-
+		String[] array = frase.split(" ");
+		String[][] novoarray = new String[1][array.length+1];
+		int tamanhoArray = array.length+1;				
+		Annotation annotation = new Annotation(frase);
 		pipeline.annotate(annotation);
 		List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
-
-		for (CoreMap sentence : sentences) {
+		int linha = 0;
+		int coluna = 0;
+		for (CoreMap sentence : sentences) {			
 			for (CoreLabel token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
-
-				String word = token.get(CoreAnnotations.TextAnnotation.class);
+		//		String word = token.get(CoreAnnotations.TextAnnotation.class);
 				String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
-				System.out.println(word + "/" + pos);
-				System.out.println();
+		//		System.out.println(word + "/" + pos);	
 				
-
-			}
-		}
-
+			    String posTag = pos;
+				novoarray[linha][coluna] = posTag;
+				if(coluna == (tamanhoArray - 2)){
+					novoarray[0][coluna+1] = "#";
+				}
+				
+				
+				coluna++; 
+				
+				
+				}							 
+		//		System.out.println();				
+				                			
+			}							
+		return novoarray;
 	}
-	
 	
 	
 	static void comparaArrays(String [][]regras, String [][] f){
 	
-	// Compara elementos de dois arrays		
+	
         int linhaFrase = 0;
         int cont = 0;
 		try {
-	//		boolean auxComp  = false;			
+			
 			primeiroloop: 
 				for (int linha = 0; linha < regras.length; linha++) {					
 				segundoloop: 
 					//System.out.printf(" %da. linha : ", (linha + 1));					
 				for (int coluna = 0; coluna < regras[linha].length; coluna++) {													
-					if(f[linhaFrase][coluna].equals(regras[linha][coluna])){						
-						if ((regras[linha][coluna].equals("#")) && (f[linhaFrase][coluna].equals("#"))) {						
+					if(!f[linhaFrase][coluna].equals(regras[linha][coluna])){
+												
+						break;
+						
+					}else if ((regras[linha][coluna].equals("#")) && (f[linhaFrase][coluna].equals("#"))) {						
 							TagText.linhaKey = linha;
 							TagText.colunaKey = coluna;
 							int c = coluna + 2;
@@ -283,9 +288,9 @@ public class TagText {
 							break primeiroloop;
 						}																																											
 					}																								 
-					//	break primeiroloop;					
+									
 				}								
-				}
+				
 			
 			
 			
@@ -328,18 +333,76 @@ public class TagText {
 	
 	
 	
+	
+	
+	static String[][] regras(){
+		
+		String [][] regras = {{"NNP", "NNP", "VBZ", "DT", "NN", "IN", "DT", "NNP", "#", "What", "1"},{"PRP", "VBZ", "DT", "NN", "#", "Who", "0"},
+				{ "DT","VBZ","DT","NN","#","Who","0"}};
+		
+		return regras;
+	}
+	
+	
+	
+	
+	
+	static String [] arrayFraseConteudo(String frase){
+		
+		String[] array = frase.split(" ");
+		String[] newA = new String[array.length+1];
+	
+	
+		for (int i = 0; i <= array.length; i++) {
+			
+			if(i!=array.length){
+				newA[i] = array[i];
+			}else if(i==array.length){                	
+                	  newA[i] = "#";
+                  }	
+		}
+		
+		
+		return newA;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	static void testaProjeto(){
 		
-	//	String [][] regras = { { "NNP", "NNP", "VBZ", "DT", "NN", "DT", "NN", "#", "Who", "1" }, { "NP", "DT", "#" } };
-		String [][] regras = {{"NN", "NN", "VBZ", "DT", "NN", "DT", "NN", "#", "What", "1"},{"DT","VBZ","#","Who","0"},
+	
+		String [][] regras = {{"NN", "NN", "VBZ", "DT", "NN", "IN", "NN", "#", "What", "1"},{"DT","VBZ","#","Who","0"},
 				{ "DT","VBZ","DT","NN","#","Who","0"}};
 		// String pos = "DT VBZ #";
+		String pos ="DT VBZ DT NN #";
+	//	String pos = "NN NN VBZ DT NN IN NN #";  
 	//	String pos ="DT VBZ DT NN #";
-		String pos = "NN NN VBZ DT NN DT NN #";  
-		//String pos ="DT VBZ DT NN #";		
-		String word = "Barack Obama is the president of America #" ;	
-	//	String word = "He is the teacher #";				
-	//	String word = "This is a dog #" ;
+		
+		// Substantivo composto seguido de verbo be
+		//String word = "Barack Obama is the president of the America #" ;
+						
+		
+		// Pronome pessoal seguindo de verbo de verbo be
+		String word = "She is the teacher #";			
+		
+		// Pronome Demonstrativo  seguido de verbo be
+//		String word = "This is a dog #" ;
+				
+	
+		
+		
+		
+		
 		
 		
 		
@@ -373,10 +436,28 @@ public class TagText {
 	 */
 	public static void main(String[] args) {
 
-		// TagText.parser();
+		
+		// Frase
+//	String frase = "This is a dog" ;
+//		String frase = "Barack Obama is the president of the America" ;
+		
+		String frase = "She is the teacher";	
+				
+		TagText.comparaArrays(TagText.regras(), TagText.parser(frase));
+		
+		String [] array = TagText.arrayFraseConteudo(frase).clone();
+		String index =  TagText.getIndex();
+		
+		String palavraChave = TagText.keyWQ(TagText.regras());
+		
+		
+		//TagText.creationQuestion(array, index, palavraChave);
+		
+		
+	    TagText.wiewQuestion(array, index,palavraChave);
 					
 
-		TagText.testaProjeto();
+	//	TagText.testaProjeto();
 		
 
 			
