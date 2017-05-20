@@ -39,10 +39,72 @@ public class TagText {
 	static int colunaKey = 0;
 	static String index = "";
 	
+	
+	
+	
 
 	public static String getIndex() {
 		return index;
 	}
+	
+	
+	
+	
+
+	
+	static void testaProjeto(){
+		
+	
+		String [][] regras = {{"NN", "NN", "VBZ", "DT", "NN", "IN", "NN", "#", "What", "1"},{"DT","VBZ","#","Who","0"},
+				{ "DT","VBZ","DT","NN","#","Who","0"}};
+		// String pos = "DT VBZ #";
+		String pos ="DT VBZ DT NN #";
+	//	String pos = "NN NN VBZ DT NN IN NN #";  
+	//	String pos ="DT VBZ DT NN #";
+		
+		// Substantivo composto seguido de verbo be
+		//String word = "Barack Obama is the president of the America #" ;
+						
+		
+		// Pronome pessoal seguindo de verbo de verbo be
+		String word = "She is the teacher #";			
+		
+		// Pronome Demonstrativo  seguido de verbo be
+//		String word = "This is a dog #" ;
+				
+	
+		
+		
+		
+		
+		
+		
+		
+		String[] array = word.split(" ");
+		
+		
+		
+		// Clona o array com os elementos da frase.
+		String[][] f = TagText.arrayFrase(pos).clone();
+		
+		
+		
+		// Compara os arrays
+		TagText.comparaArrays(regras, f);
+		
+		
+		
+		
+		
+		
+		TagText.wiewQuestion(array, TagText.getIndex(),TagText.keyWQ(regras));
+		
+		
+	}
+	
+	
+	
+	
 
 	/**
 	 * Exibe o conteúdo de um array bidimenssional teste
@@ -137,8 +199,13 @@ public class TagText {
 		String c = "";		
 
 		boolean endTroca =  false;
+		boolean end = false;
 		int nnCof = 0;
 		boolean wordEnd = true;
+		boolean verif = false;
+		String suja = "";
+		Help p =  new Help();
+		
 		for (int i = 0; i < array.length; i++) {
 			// variavel c pois senão toda vez vai trocar
 			if (("0".equals(index) && c.equals("") )) {                
@@ -156,14 +223,76 @@ public class TagText {
 				endTroca = true;
 				nnCof = 0;
 				wordEnd = false;
-				}												
+			}else if("2".equals(index) && !endTroca && (!verif)){
+				
+				endTroca = false;
+				if(i==0){										
+			     p.setA(array[i]);			     				
+				arrayQ[i] = " ";
+				}else if(i==1){
+	            p.setB(array[i]);
+					arrayQ[i] = word + " ";
+				}else if(i==2){
+					
+					arrayQ[i] = array[i] + " ";
+					end = true;
+					
+				}else if(i==3){
+					arrayQ[i] = p.getA().toLowerCase() + " ";
+					
+				}else if(i==4){
+					arrayQ[i] = p.getB() + " ";
+				}else if(i==5){
+					arrayQ[i] = " ?";
+				}else{
+					arrayQ[i] = "";
+				}				
+				
+			}else if("3".equals(index)){
+				 endTroca = false;
+				if(i==0){										
+				     p.setA(array[i]);			     				
+					arrayQ[i] = word + " ";
+					}else if(i==1){
+		            p.setB(array[i]);
+						//arrayQ[i] = arrayQ[i-1] + "" ;
+					}else if(i==2){						
+						arrayQ[i-1] = array[i] + " ";
+						arrayQ[i] = p.getA().toLowerCase() + " ";
+						end = true;
+						
+					}else if(i==3){
+						arrayQ[i] = p.getB() + " ";
+						endTroca=false;
+						verif=false;
+					}else if(i==4){
+						arrayQ[i] = " ?";
+					}
+				
+				
+				
+				
+				
+				
+				
+			}   
+			
+					
+			
 			else{
+				
+				
 				if(!array[i].equals("#") && endTroca){
 				arrayQ[i] = array[i] + " ";
-				} else{
+				verif = true;
+				} else if(verif){
 										
 					arrayQ[i] = " ?";
 				}
+			
+			
+			
+			
 			}
 
 			
@@ -244,21 +373,15 @@ public class TagText {
 			for (CoreLabel token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
 		//		String word = token.get(CoreAnnotations.TextAnnotation.class);
 				String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
-		//		System.out.println(word + "/" + pos);	
-				
+		//		System.out.println(word + "/" + pos);					
+				System.out.println("POSTAG : " + pos);
 			    String posTag = pos;
 				novoarray[linha][coluna] = posTag;
 				if(coluna == (tamanhoArray - 2)){
 					novoarray[0][coluna+1] = "#";
-				}
-				
-				
-				coluna++; 
-				
-				
-				}							 
-		//		System.out.println();				
-				                			
+				}								
+				coluna++; 								
+				}							 						                			
 			}							
 		return novoarray;
 	}
@@ -308,7 +431,7 @@ public class TagText {
 /**
  * 	
  * @param regras
- * @return  um Pronome para construção da pergunta
+ * @return palavra Chave para Construção da Pergunta
  */
 	static String keyWQ(String [][] regras){
 	
@@ -316,10 +439,7 @@ public class TagText {
 		int keyLinQuestion = TagText.linhaKey;
 		int KeyColQuestion = TagText.colunaKey + 1;									
 		String keyWord = TagText.searchWordQuetion(keyLinQuestion, KeyColQuestion, regras);
-		return keyWord;
-
-		
-		
+		return keyWord;			
 		
 	}
 	
@@ -328,8 +448,7 @@ public class TagText {
 	static void wiewQuestion(String [] array , String index , String word){
 		TagText.evibeArray(TagText.creationQuestion(array,index,word));
 		}
-	
-	// String [] arrayF, TagText.getIndex(), TagText.keyWord(regras)
+		
 	
 	
 	
@@ -337,8 +456,13 @@ public class TagText {
 	
 	static String[][] regras(){
 		
-		String [][] regras = {{"NNP", "NNP", "VBZ", "DT", "NN", "IN", "DT", "NNP", "#", "What", "1"},{"PRP", "VBZ", "DT", "NN", "#", "Who", "0"},
-				{ "DT","VBZ","DT","NN","#","Who","0"}};
+		String [][] regras = {
+				{"NNP", "NNP", "VBZ", "DT", "NN", "IN", "DT", "NNP", "#", "Who", "1"},
+				{"PRP", "VBZ", "DT", "NN", "#", "Who", "0"},
+				{ "DT","VBZ","DT","NN","#","Who","0"}, 
+				{"NNP", "VBZ", "DT", "NN", "IN", "DT", "NNP", "#", "Who", "0"}, 
+				{"DT", "NN", "VBZ", "IN", "DT", "NN", "NN", "#", "Where", "2"}, 
+				{ "DT","NN","VBZ","NNP","#","Which","3"}};
 		
 		return regras;
 	}
@@ -377,56 +501,7 @@ public class TagText {
 	
 	
 	
-	
-	static void testaProjeto(){
-		
-	
-		String [][] regras = {{"NN", "NN", "VBZ", "DT", "NN", "IN", "NN", "#", "What", "1"},{"DT","VBZ","#","Who","0"},
-				{ "DT","VBZ","DT","NN","#","Who","0"}};
-		// String pos = "DT VBZ #";
-		String pos ="DT VBZ DT NN #";
-	//	String pos = "NN NN VBZ DT NN IN NN #";  
-	//	String pos ="DT VBZ DT NN #";
-		
-		// Substantivo composto seguido de verbo be
-		//String word = "Barack Obama is the president of the America #" ;
-						
-		
-		// Pronome pessoal seguindo de verbo de verbo be
-		String word = "She is the teacher #";			
-		
-		// Pronome Demonstrativo  seguido de verbo be
-//		String word = "This is a dog #" ;
-				
-	
-		
-		
-		
-		
-		
-		
-		
-		String[] array = word.split(" ");
-		
-		
-		
-		// Clona o array com os elementos da frase.
-		String[][] f = TagText.arrayFrase(pos).clone();
-		
-		
-		
-		// Compara os arrays
-		TagText.comparaArrays(regras, f);
-		
-		
-		
-		
-		
-		
-		TagText.wiewQuestion(array, TagText.getIndex(),TagText.keyWQ(regras));
-		
-		
-	}
+
 	
 	
 
@@ -438,10 +513,25 @@ public class TagText {
 
 		
 		// Frase
-//	String frase = "This is a dog" ;
-//		String frase = "Barack Obama is the president of the America" ;
+    	
+//		String frase = "Donald Trump  is the president of the America" ;				
+	//	String frase = "She is the teacher";	
+	//	String frase = "This is a dog" ;
+	//	String frase = "Trump is the president of the America" ;
+		 //  String frase =  "The training is at the music store";
 		
-		String frase = "She is the teacher";	
+		
+		
+		// Abaixo fazer os teste e colocar no simulação da conflinto
+		      String frase = "The training is PLN";
+		// String frase = "The training is Monday";
+		
+		
+		
+		
+	
+		
+		
 				
 		TagText.comparaArrays(TagText.regras(), TagText.parser(frase));
 		
