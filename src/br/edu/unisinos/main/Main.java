@@ -20,7 +20,7 @@ public class Main {
 			
 		//System.getProperty("java -Xmx500m -cp /path/to/stanford-parser.jar edu.stanford.nlp.parser.lexparser.LexicalizedParser -tokenized -sentences newline -outputFormat oneline -uwModel edu.stanford.nlp.parser.lexparser.BaseUnknownWordModel cintil.ser.gz input.txt");		
 		
-		System.out.println("Teste :::::::   !!!!!!!   ");
+		System.out.println("Commit and Push :::::::   !!!!!!!   ");
 
 	}
 
