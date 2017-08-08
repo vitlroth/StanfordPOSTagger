@@ -1,6 +1,6 @@
 package br.edu.unisinos.main;
 
-public class Help {
+public class AuxiliarCreateQuestion {
 	
 	
 	private String a =  " ";
