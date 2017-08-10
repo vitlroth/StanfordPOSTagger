@@ -17,6 +17,8 @@ import edu.stanford.nlp.util.CoreMap;
  */
 public class AuxiliarParser {
 
+	static boolean simplifique = false;
+
 	static void parser(String frase) {
 		Properties props = new Properties();
 		props.setProperty("annotators", "tokenize, ssplit, pos");
@@ -57,7 +59,7 @@ public class AuxiliarParser {
 
 	}
 
-	static String[][] parserTeste(String frase) {
+	static String[][] parserWORD(String frase) {
 
 		// cria um objeto StanfordCorelNLP object a partir de um conjunto de
 		// propriedades
@@ -65,7 +67,7 @@ public class AuxiliarParser {
 		props.setProperty("annotators", "tokenize, ssplit, pos");
 		StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
 		String[] array = frase.split(" ");
-		
+
 		String[][] novoarray = null;
 		int tam = 0;
 		boolean simplifica = false;
@@ -94,7 +96,8 @@ public class AuxiliarParser {
 
 			for (CoreLabel token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
 
-				//String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+				// String pos =
+				// token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
 				String word = token.get(CoreAnnotations.TextAnnotation.class);
 
 				novoarray[linha][coluna] = word;
@@ -102,132 +105,194 @@ public class AuxiliarParser {
 
 			}
 		}
-	
-		
-		
+
 		// ENTRADA DO MÉTODO SIMPLIFICA FRASE
 		if (simplifica) {
 
-	novoarray =	simplificaFrase(novoarray, tam);
+			novoarray = simplificaFrase(novoarray, tam);
 
 		}
 
 		return novoarray;
 	}
-	
-	
-	
-	
-	
-	/**
-	 * Algoritmo transforma frase aplicando um split e adicionando um caracter no fim do array
-	 * @param frase
-	 * @return
-	 */
-	public String[] transformarFrasesSimplificadas(String[][] frase, int tam) {
 
-		//String[] array = frase.split(" ");
+	static String[][] parserPOS(String frase) {
+
+		// cria um objeto StanfordCorelNLP object a partir de um conjunto de
+		// propriedades
+		Properties props = new Properties();
+		props.setProperty("annotators", "tokenize, ssplit, pos");
+		StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+		String[] array = frase.split(" ");
+
+		String[][] novoarray = null;
+		int tam = 0;
+		boolean simplifica = false;
+		int contador = contaCaracteresEspeciais(frase);
+		if (contador == 0) {
+			novoarray = new String[1][array.length];
+		} else {
+			tam = array.length + contador;
+			novoarray = new String[1][tam];
+			simplifica = true;
+			simplifique = true;
+
+		}
+
+		// cria uma anotação vazia com o frase de entrada
+		Annotation annotation = new Annotation(frase);
+
+		// executa todos os anotators desse texto
+		pipeline.annotate(annotation);
+
+		// Split - Divide uma sequencia de TOKENS em frases. Pode ser um
+		// paragrafo, um texto - todas as frases do documento
+		List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
+		int linha = 0;
+		int coluna = 0;
+
+		for (CoreMap sentence : sentences) {
+
+			for (CoreLabel token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
+
+				String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+				// String word =
+				// token.get(CoreAnnotations.TextAnnotation.class);
+
+				novoarray[linha][coluna] = pos;
+				coluna++;
+
+			}
+		}
+
+		// ENTRADA DO MÉTODO SIMPLIFICA FRASE
+		if (simplifica) {
+
+			novoarray = simplificaFrase(novoarray, tam);
+
+		}
+
+		return novoarray;
+	}
+
+	static String[] transformarFrasesSimplificadas(String[][] frase, int tam) {
+
 		String[] newA = new String[tam];
 
-		
 		for (int i = 0; i < frase.length; i++) {
-			
-			
+
 			for (int j = 0; j < frase[i].length; j++) {
-				
-		//		newA[j] = frase[][];
-				
-				
+				if (frase[i][j] == null) {
+					break;
+				} else {
+
+					newA[j] = frase[i][j];
+				}
+
 			}
-			
-			
-			
+
 		}
-		
-		
-		
 
-
-		return null;
+		return newA;
 
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
-	static String [][] simplificaFrase(String [][] array, int tam){
-		
-		String [][] spf = new String [1][tam];
+	static String[][] simplificaFrase(String[][] array, int tam) {
+
+		String[][] spf = new String[1][tam];
+
 		int marc1 = 0;
 		int marc2 = 0;
 		int marc3 = 0;
-	
-		
+		int contador = 0;
+
 		for (int linha = 0; linha < array.length; linha++) {
-		
-			
+
 			for (int coluna = 0; coluna < array[linha].length; coluna++) {
 
-				if(array[linha][coluna].equals(",") && marc1==0){
-					marc1=coluna;					
-				}else if(array[linha][coluna].equals(",") && marc2==0 && marc1!=0){
-					marc2=coluna;
-					marc3=3;
-				}else if ( (coluna > marc2)  &&  (!array[linha][coluna].equals(",") ) && marc3==3 ){
+				if (array[linha][coluna].equals(",") && marc1 == 0) {
+					marc1 = coluna;
+				} else if (array[linha][coluna].equals(",") && marc2 == 0 && marc1 != 0) {
+					marc2 = coluna;
+					marc3 = 3;
+				} else if ((coluna > marc2) && (!array[linha][coluna].equals(",")) && marc3 == 3) {
 					spf[0][marc1] = array[linha][coluna];
 					marc1++;
-				}else if( ( marc1==0 ) &&  ( !array[linha][coluna].equals(",") )){
+					contador++;
+				} else if ((marc1 == 0) && (!array[linha][coluna].equals(","))) {
 					spf[linha][coluna] = array[linha][coluna];
-				}else{
+					contador++;
+				} else {
 					spf[0][coluna] = " ";
-					
-				}												                 
-			}						
+
+				}
+			}
 		}
-		
-		
-		return spf;
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
+		String[][] newArray = new String[1][contador];
+		for (int i = 0; i < spf.length; i++) {
+			for (int j = 0; j < spf[i].length; j++) {
+
+				if ((spf[0][j] != null) && (!spf[0][j].equals(" "))) {
+					newArray[0][j] = spf[0][j];
+				}else{
+					break;
+				}
+
+			}
+		}
+
+		return newArray;
+
 	}
 
 	public static void main(String[] args) {
 
-		// https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html
+		// SITE DAS FRASES
+		// https://www.thoughtco.com/what-is-appositive-grammar-1689128
 
-		String frasex = "Alan, the chief executive of the project, has just called for a meeting ";
+		String frasex = "Alan, the chief executive of the project, has just called for a meeting";
+		String frase2 = "The hangman, a grey-haired convict in the white uniform of the prison, was waiting beside his machine";
+		String frase3 = "Television was left on, a running tap, from morning till night";
+		String frase4 = "The king, my brother, has been murdered";
+		String frase1 = "We spotted Tom Hanks, the movie star, at the cafe yesterday";
+		
+		String [] fraseOrig = frasex.split(" ");
 
-		// AuxiliarParser.parser(frasex);;
+		// String[][] l = AuxiliarParser.parserWORD(frasex).clone();
+		String[][] lx = null;
 
-		String[][] l = AuxiliarParser.parserTeste(frasex);
+		// ARRAY PARA COMPARAR COM O ARRAY DE REGRAS
+		String[][] pos = AuxiliarParser.parserPOS(frasex);
+		int tamanho = pos[0].length;
+
+		// Procura a regra correspondente comparando com o resultado da analise
+		// inclusive se simplificada se for o caso.
+		// negocio.comparaArraysBID(regrasB, Parsing.parserBid(frase[i]));
+
+		if (AuxiliarParser.simplifique) {
+			lx = AuxiliarParser.parserWORD(frasex).clone();
+		}
 
 		Util u = new Util();
-		u.exibeBidmenssional(l);
-	//	u.exibeArray(array);
+		System.out.println("Frase Original");
+String frOr = "";
+for (int i = 0; i < fraseOrig.length; i++) {
+	frOr += fraseOrig[i] + " ";
+}
+		System.out.println(frOr);
+		
+		System.out.println("Frase simplifica ");
+		u.exibeBidmenssional(lx);
+		System.out.println("Analise da Frase simplifica ");
+		u.exibeBidmenssional(pos);
+
+		// String [] arrayNovo =
+		// AuxiliarParser.transformarFrasesSimplificadas(l,tamanho);
+
+		// u.exibeArray(arrayNovo);
+
+		// u.exibeBidmenssional(pos);
 
 	}
 
