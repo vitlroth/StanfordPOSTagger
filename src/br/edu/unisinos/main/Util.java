@@ -37,7 +37,11 @@ public class Util {
 		int cont = 1;
 		System.out.println();
 		for (int i = 0; i < array.length; i++) {
-			System.out.println(cont + "." + " " + array[i]);
+			if(array[i]!=null || !array[i].equals(" ")){
+			System.out.println(cont + " " + " " + array[i]);
+			}else{
+				System.out.println("");
+			}
 			cont++;
 		}
 
@@ -67,8 +71,8 @@ public class Util {
 		int linha;
 		int contador = 1;
 		for (linha = 0; linha < array.length; linha++) {
-			// System.out.printf(" %da. linha : ", (linha + 1));
-			System.out.println(contador + ")");
+		
+		
 			for (int coluna = 0; coluna < array[linha].length; coluna++) {
 
 				if (array[linha][coluna] != null) {
@@ -81,6 +85,57 @@ public class Util {
 
 		}
 	}
+	
+	
+	
+	
+	
+	public String[] transformarArrayBid(int tam, String[][] aux) {
+
+		int tamanho = tam + 1;
+		String[] newA = new String[tamanho];
+
+		for (int i = 0; i < aux.length; i++) {
+
+			for (int j = 0; j < aux[i].length; j++) {
+				
+				newA[j] = aux[i][j];
+
+			}
+
+		}
+
+		return newA;
+
+	}
+
+	
+	
+	public String[] transformarArrayB(int tam, String[][] aux) {
+
+		int tamanho = tam;
+		String[] newA = new String[tamanho];
+
+		for (int i = 0; i < aux.length; i++) {
+
+			for (int j = 0; j < aux[i].length; j++) {
+				
+				newA[j] = aux[i][j];
+
+			}
+
+		}
+
+		return newA;
+
+	}
+
+	
+	
+	
+	
+	
+	
 	
 	
 	

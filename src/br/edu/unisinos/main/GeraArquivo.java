@@ -48,9 +48,11 @@ public class GeraArquivo {
 
 		try {			
 			PrintWriter grava = new PrintWriter(fw);
-			primeirofor: for (int i = 0; i < frases.length; i++) {
+			primeirofor: 
+				for (int i = 0; i < frases.length; i++) {
 				grava.println(frases[i]);
-				segundofor: for (int j = 0; j < questoes.length; j++) {
+				segundofor: 
+					for (int j = 0; j < questoes.length; j++) {
 					grava.println(questoes[i]);
 					break;
 				}

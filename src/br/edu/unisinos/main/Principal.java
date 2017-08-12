@@ -55,8 +55,12 @@ public class Principal {
 			// u.exibeArrayFrases(frase);
 			for (int i = 0; i < frase.length; i++) {
 
-				String[] transformacao = u.transformarFrases(frase[i]).clone();
+				
+				
 				negocio.comparaArraysBID(regrasB, Parsing.parserBid(frase[i]));
+				
+				String[] transformacao = u.transformarFrases(frase[i]).clone();
+				
 				String[] guardaQuestao = QuestionGeneration.questionGeneration(transformacao, Regras.index,
 						Regras.word);
 
@@ -74,12 +78,12 @@ public class Principal {
 			u.exibeResultado(frase, listaDeQuestoes);
 
 			// GERA UM ARQUIVO DE SAIDA CONTENDO AS QUESTÕES GERADAS
-			GeraArquivo gerador = new GeraArquivo();
-			FileWriter fw = new FileWriter("ListaDeQuestoes.txt");
+	//		GeraArquivo gerador = new GeraArquivo();
+		//	FileWriter fw = new FileWriter("ListaDeQuestoes.txt");
 			// Gera arquivo com as questoes
 			// gerador.geraArquivoTXT(totalDeLinhas, fw, listaDeQuestoes);
 			// Gera arquivo com as Frases de entrada e as questoes geradas.
-			 gerador.gerarTXT(totalDeLinhas, fw, frase,listaDeQuestoes);
+		//	 gerador.gerarTXT(totalDeLinhas, fw, frase,listaDeQuestoes);
 
 		} catch (FileNotFoundException e) { // TODO Auto-generated catch
 

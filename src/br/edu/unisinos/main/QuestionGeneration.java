@@ -111,7 +111,11 @@ public class QuestionGeneration {
 		String questaoR = "";
 
 		for (int i = 0; i < questao.length; i++) {
+			if(questao[i].equals("#")){
+				questaoR += " ";
+			}else{
 			questaoR += questao[i] + " ";
+			}
 		}
 		return questaoR;
 
@@ -129,7 +133,7 @@ public class QuestionGeneration {
 				break;
 			} else if (("1".equals(index) && endTroca == false) || ("3".equals(index) && endTroca == false)
 					|| ("4".equals(index) && endTroca == false) || ("5".equals(index) && endTroca == false) 
-					|| ("9".equals(index) && endTroca == false) ) {
+					|| ("9".equals(index) && endTroca == false)   || ("11".equals(index) && endTroca == false)) {
 				arrayQ[i] = word + " ";
 				endTroca = true;
 			} else if ("2".equals(index) && (i == 0)) {

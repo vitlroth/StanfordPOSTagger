@@ -18,6 +18,7 @@ import edu.stanford.nlp.util.CoreMap;
 public class AuxiliarParser {
 
 	static boolean simplifique = false;
+	static int contadorSimpl = 1;
 
 	static void parser(String frase) {
 		Properties props = new Properties();
@@ -115,8 +116,23 @@ public class AuxiliarParser {
 
 		return novoarray;
 	}
-
-	static String[][] parserPOS(String frase) {
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	static String[][] parserSIMPLIFICADOR(String frase) {
 
 		// cria um objeto StanfordCorelNLP object a partir de um conjunto de
 		// propriedades
@@ -134,6 +150,84 @@ public class AuxiliarParser {
 		} else {
 			tam = array.length + contador;
 			novoarray = new String[1][tam];
+			simplifica = true;
+		}
+
+		// cria uma anotação vazia com o frase de entrada
+		Annotation annotation = new Annotation(frase);
+
+		// executa todos os anotators desse texto
+		pipeline.annotate(annotation);
+
+		// Split - Divide uma sequencia de TOKENS em frases. Pode ser um
+		// paragrafo, um texto - todas as frases do documento
+		List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
+		int linha = 0;
+		int coluna = 0;
+
+		for (CoreMap sentence : sentences) {
+
+			for (CoreLabel token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
+
+				// String pos =
+				// token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+				String word = token.get(CoreAnnotations.TextAnnotation.class);
+
+				novoarray[linha][coluna] = word;
+				coluna++;
+
+			}
+		}
+
+		// ENTRADA DO MÉTODO SIMPLIFICA FRASE
+		if (simplifica) {
+
+			novoarray = simplificaFrase(novoarray, tam);
+
+		}
+
+		return novoarray;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	static String[][] parserPOS(String frase) {
+
+		// cria um objeto StanfordCorelNLP object a partir de um conjunto de
+		// propriedades
+		Properties props = new Properties();
+		props.setProperty("annotators", "tokenize, ssplit, pos");
+		StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+		String[] array = frase.split(" ");
+		int tamanhoArray = 0;
+		String[][] novoarray = null;
+		int tam = 0;
+		boolean simplifica = false;
+		int contador = contaCaracteresEspeciais(frase);
+		if (contador == 0) {
+			novoarray = new String[1][array.length + 1];
+			tamanhoArray = array.length + 1;
+
+		} else {
+			tam = array.length + contador;
+			tamanhoArray = tam + 1;
+			novoarray = new String[1][tamanhoArray];
 			simplifica = true;
 			simplifique = true;
 
@@ -160,6 +254,11 @@ public class AuxiliarParser {
 				// token.get(CoreAnnotations.TextAnnotation.class);
 
 				novoarray[linha][coluna] = pos;
+				if (coluna == (tamanhoArray - 2) && simplifica == false) {
+					novoarray[0][coluna + 1] = "#";
+				} else if (coluna == (tamanhoArray - 2) && simplifique) {
+					novoarray[0][coluna + 1] = "#";
+				}
 				coluna++;
 
 			}
@@ -175,19 +274,20 @@ public class AuxiliarParser {
 		return novoarray;
 	}
 
-	static String[] transformarFrasesSimplificadas(String[][] frase, int tam) {
+	static String[] transformarArray(int tam, String[][] aux) {
 
-		String[] newA = new String[tam];
+		int tamanho = tam + 1;
+		String[] newA = new String[tamanho];
 
-		for (int i = 0; i < frase.length; i++) {
+		for (int i = 0; i < aux.length; i++) {
 
-			for (int j = 0; j < frase[i].length; j++) {
-				if (frase[i][j] == null) {
+			for (int j = 0; j < aux[i].length; j++) {
+				if ((j + 1) == tam) {
+					newA[j + 1] = "#";
+					newA[j] = aux[i][j];
 					break;
-				} else {
-
-					newA[j] = frase[i][j];
 				}
+				newA[j] = aux[i][j];
 
 			}
 
@@ -235,7 +335,7 @@ public class AuxiliarParser {
 
 				if ((spf[0][j] != null) && (!spf[0][j].equals(" "))) {
 					newArray[0][j] = spf[0][j];
-				}else{
+				} else {
 					break;
 				}
 
@@ -256,8 +356,8 @@ public class AuxiliarParser {
 		String frase3 = "Television was left on, a running tap, from morning till night";
 		String frase4 = "The king, my brother, has been murdered";
 		String frase1 = "We spotted Tom Hanks, the movie star, at the cafe yesterday";
-		
-		String [] fraseOrig = frasex.split(" ");
+
+		String[] fraseOrig = frasex.split(" ");
 
 		// String[][] l = AuxiliarParser.parserWORD(frasex).clone();
 		String[][] lx = null;
@@ -276,12 +376,12 @@ public class AuxiliarParser {
 
 		Util u = new Util();
 		System.out.println("Frase Original");
-String frOr = "";
-for (int i = 0; i < fraseOrig.length; i++) {
-	frOr += fraseOrig[i] + " ";
-}
+		String frOr = "";
+		for (int i = 0; i < fraseOrig.length; i++) {
+			frOr += fraseOrig[i] + " ";
+		}
 		System.out.println(frOr);
-		
+
 		System.out.println("Frase simplifica ");
 		u.exibeBidmenssional(lx);
 		System.out.println("Analise da Frase simplifica ");
