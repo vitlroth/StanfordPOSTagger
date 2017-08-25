@@ -1,4 +1,3 @@
-
 /***************************************************************
  *  Compilation:  javac RabinKarp.java
  *  Execution:    java RabinKarp pat txt
@@ -143,8 +142,8 @@ public class RabinKarp {
 	 * @param pat
 	 * @return
 	 */
-	static int emparelhamentoDeCadeias(String txt, String pat) {
-		RabinKarp searcher = new RabinKarp(pat);
+	static int emparelhamentoDeCadeias(String txt, String padroes) {
+		RabinKarp searcher = new RabinKarp(padroes);
 		int offset = searcher.search(txt);
 		return offset;
 
@@ -190,12 +189,10 @@ public class RabinKarp {
 		*/
 				
 		String pat = "DT NN VBZ";
-		// String txt = "abacadabrabracabracadabrabrabracad";
-
+		
 		String[] r = new String[5];
 
-		String txt = "NN VBZ #";
-
+	
 		r[0] = "NN VBZ IN #";
 		r[1] = "DT NN VBZ IN NN NN #";
 		r[2] = "NN VBZ IN #";

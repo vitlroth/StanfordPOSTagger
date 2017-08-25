@@ -31,6 +31,12 @@ public class Negocio {
 						if ((regras[linha][coluna].equals("#")) && (parser[linhaFrase][coluna].equals("#"))) {														
 							int indice = coluna + 2;
 							int indiceWord = coluna + 1;
+							
+							
+							
+							
+							
+							// Continue
 							Regras.index = regras[linha][indice];
 							Regras.word = regras[linha][indiceWord];
 							verificador = true;

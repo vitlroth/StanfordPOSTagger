@@ -13,6 +13,7 @@
 /german-ud.tagger
 /german-ud.tagger.props
 /spanish-distsim.tagger
+/br/
 /spanish-distsim.tagger.props
 /spanish.tagger
 /spanish.tagger.props
@@ -21,7 +22,6 @@
 /wsj-0-18-bidirectional-nodistsim.tagger
 /wsj-0-18-bidirectional-nodistsim.tagger.props
 /wsj-0-18-caseless-left3words-distsim.tagger
-/br/
 /wsj-0-18-caseless-left3words-distsim.tagger.props
 /wsj-0-18-left3words-distsim.tagger
 /wsj-0-18-left3words-distsim.tagger.props

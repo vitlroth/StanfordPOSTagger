@@ -23,6 +23,8 @@ public class TagText {
 	static int colunaKey = 0;
 	static String index = "";
 	static String word = "";
+	public String index1 ="";
+	public String word1 = "";
 
 	public static void setWord(String word) {
 		TagText.word = word;

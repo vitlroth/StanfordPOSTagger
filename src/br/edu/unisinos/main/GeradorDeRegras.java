@@ -10,6 +10,12 @@ public class GeradorDeRegras {
 
 		
 		
+		
+		
+		
+		
+		
+		
 		FileReader fr;
 		try {
 			fr = new FileReader("BackupFrases.txt");

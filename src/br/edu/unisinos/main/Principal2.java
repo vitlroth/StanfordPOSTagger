@@ -52,8 +52,7 @@ public class Principal2 {
 
 				// Alteração com simplificação
 				negocio.comparaArraysBID(regrasB, AuxiliarParser.parserPOS(frase[i]));
-				if (AuxiliarParser.simplifique) {				
-					
+				if (AuxiliarParser.simplifique) {									
 					AuxiliarParser.simplifique = false;
 					auxFrSimp = AuxiliarParser.parserWORD(frase[i]);
 				   

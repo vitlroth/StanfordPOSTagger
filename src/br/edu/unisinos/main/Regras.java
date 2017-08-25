@@ -5,6 +5,14 @@ public class Regras {
 	
 	static String index;
 	static String word;
+	public static String getWord() {
+		return word;
+	}
+	
+	
+	public static void setWord(String word) {
+		Regras.word = word;
+	}
 	
 	
 
