@@ -351,7 +351,7 @@ public class AuxiliarParser {
 		// SITE DAS FRASES
 		// https://www.thoughtco.com/what-is-appositive-grammar-1689128
 
-		String frasex = "Alan, the chief executive of the project, has just called for a meeting";
+		String frasex = "The English class is on Monday";
 		String frase2 = "The hangman, a grey-haired convict in the white uniform of the prison, was waiting beside his machine";
 		String frase3 = "Television was left on, a running tap, from morning till night";
 		String frase4 = "The king, my brother, has been murdered";
@@ -370,7 +370,7 @@ public class AuxiliarParser {
 		// inclusive se simplificada se for o caso.
 		// negocio.comparaArraysBID(regrasB, Parsing.parserBid(frase[i]));
 
-		if (AuxiliarParser.simplifique) {
+		if (AuxiliarParser.simplifique) {https://super.abril.com.br/cultura/inteligencia-artificial-esta-escrevendo-o-fim-de-game-of-thrones/
 			lx = AuxiliarParser.parserWORD(frasex).clone();
 		}
 
@@ -383,7 +383,7 @@ public class AuxiliarParser {
 		System.out.println(frOr);
 
 		System.out.println("Frase simplifica ");
-		u.exibeBidmenssional(lx);
+	//	u.exibeBidmenssional(lx);
 		System.out.println("Analise da Frase simplifica ");
 		u.exibeBidmenssional(pos);
 
