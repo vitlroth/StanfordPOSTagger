@@ -15,7 +15,7 @@ public class Util {
 
 		primeirofor: 
 			for (int i = 0; i < f.length; i++) {
-			System.out.println("Frase de Entrada : " + f[i]);			
+			System.out.println("Frase de Entrada : "+ i + ") " + f[i]);			
 				for (int j = 0; j < p.length; j++) {
 				System.out.println("Questão : " + p[i]);
 				System.out.println();

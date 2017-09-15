@@ -351,7 +351,11 @@ public class AuxiliarParser {
 		// SITE DAS FRASES
 		// https://www.thoughtco.com/what-is-appositive-grammar-1689128
 
-		String frasex = "The English class is on Monday";
+	//	String frasex = "The color is blue";
+		String frasex = "Friend, what we do in life, echoes in eternity";
+	//	String frasex = "Brothers, what we do in life, echoes in eternity";
+		
+		
 		String frase2 = "The hangman, a grey-haired convict in the white uniform of the prison, was waiting beside his machine";
 		String frase3 = "Television was left on, a running tap, from morning till night";
 		String frase4 = "The king, my brother, has been murdered";

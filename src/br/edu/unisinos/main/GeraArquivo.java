@@ -45,15 +45,17 @@ public class GeraArquivo {
 	 * @param questoes
 	 */
 	public void gerarTXT(int tamanho, FileWriter fw, String[] frases, String[] questoes) {
+int cont = 1;
 
 		try {			
 			PrintWriter grava = new PrintWriter(fw);
 			primeirofor: 
 				for (int i = 0; i < frases.length; i++) {
-				grava.println(frases[i]);
+				grava.println("Frase : " + cont + ") " + frases[i]);
 				segundofor: 
 					for (int j = 0; j < questoes.length; j++) {
-					grava.println(questoes[i]);
+					grava.println("Questão : " + cont + ") " +questoes[i]);
+					cont++;
 					break;
 				}
 
